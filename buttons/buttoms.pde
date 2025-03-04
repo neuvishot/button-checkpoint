@@ -1,12 +1,12 @@
 class button {
   float x, y, w, h;
   color norm, high;
-  String text;
+  String text, pic;
   boolean clicked;
-
+  PImage photo;
 
   // parameters for buttons, x, y, w, h, normal color, highlight, text display
-  button(float xx, float yy, float ww, float hh, color norms, color highs, String Text) {
+  button(float xx, float yy, float ww, float hh, color norms, color highs, String Text, String pics) {
     x = xx;
     y = yy;
     w = ww;
@@ -15,24 +15,54 @@ class button {
     high = highs;
     text = Text;
     fill(norm);
+    pic = pics;
+  }
+
+  void words() {
+    textAlign(CENTER, CENTER);
+    textSize(w/4);
+    if (touchMouse()) {
+      fill(255);
+    } else {
+      fill(0);
+    }
+    text(text, x, y);
+  }
+
+  void pics() {
+    imageMode(CENTER);
+    photo = loadImage(pic);
+    image(photo, x, y, w/2, h/2);
+
+    if (pic == null) {
+      println("no pic");
+    }
   }
 
 
+  boolean touchMouse() {
+    if (mouseX > x-w/2 && mouseX < x + w/2 && mouseY > y-h/2 && mouseY < y+h/2) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   void clicked() {
-    if (mouseReleased && mouseX > x-w/2 && mouseX < x + w/2 && mouseY > y-h/2 && mouseY < y+h/2) {
+    if (mouseReleased && touchMouse()) {
       clicked = true;
     } else {
       clicked = false;
     }
-    
-    if (clicked){
-     background(norm); 
+
+    if (clicked) {
+      background(norm);
     }
   }
 
   void show() {
     rectMode(CENTER);
-    if (mouseX > x-w/2 && mouseX < x + w/2 && mouseY > y-h/2 && mouseY < y+h/2) {
+    if (touchMouse()) {
       fill(high);
       stroke(255);
     } else {
@@ -41,14 +71,5 @@ class button {
     }
     strokeWeight(3);
     rect(x, y, w, h, h/6);
-    textAlign(CENTER, CENTER);
-    textSize(w/4);
-
-    if (mouseX > x-w/2 && mouseX < x + w/2 && mouseY > y-h/2 && mouseY < y+h/2) {
-      fill(255);
-    } else {
-      fill(0);
-    }
-    text(text, x, y);
   }
 }
